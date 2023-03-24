@@ -6,9 +6,13 @@ services:
       - "9090:9090"
     depends_on:
       - stats-db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/stats-db
 
   stats-db:
     image: postgres:14-alpine
+    ports:
+      - "10050:5432"
     environment:
       - POSTGRES_DB=stats-db
       - POSTGRES_USER=stats-db
@@ -20,9 +24,13 @@ services:
       - "8080:8080"
     depends_on:
       - ewm-db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-db:5432/ewm-db
 
   ewm-db:
     image: postgres:14-alpine
+    ports:
+      - "10051:5432"
     environment:
       - POSTGRES_DB=ewm-db
       - POSTGRES_USER=ewm-db
