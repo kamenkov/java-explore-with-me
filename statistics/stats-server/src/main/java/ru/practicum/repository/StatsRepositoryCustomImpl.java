@@ -15,12 +15,12 @@ public class StatsRepositoryCustomImpl implements StatsRepositoryCustom {
 
     @Override
     public List<ViewStats> getViewStats(Timestamp startDate, Timestamp endDate, List<String> uris, boolean unique) {
-        String jpql = "SELECT new ru.practicum.model.ViewStats(e.app, e.uri, "
-                + (unique ? "COUNT(DISTINCT e.ip)" : "COUNT(e.ip)") +
-                ") FROM EndpointHit e " +
+        String count = unique ? "COUNT(DISTINCT e.ip)" : "COUNT(e.ip)";
+        String jpql = "SELECT new ru.practicum.model.ViewStats(e.app, e.uri, " + count
+                + ") FROM EndpointHit e " +
                 " WHERE e.timestamp BETWEEN :startDate AND :endDate " +
                 (uris != null && !uris.isEmpty() ? "AND e.uri IN :uris " : "") +
-                " GROUP BY e.app, e.uri";
+                " GROUP BY e.app, e.uri ORDER BY " + count + " DESC";
 
         TypedQuery<ViewStats> query = entityManager.createQuery(jpql, ViewStats.class);
         query.setParameter("startDate", startDate);
