@@ -15,7 +15,7 @@ import java.util.List;
 @RestController
 public class StatsController {
 
-    StatsService statsService;
+    private final StatsService statsService;
 
     public StatsController(StatsService statsService) {
         this.statsService = statsService;

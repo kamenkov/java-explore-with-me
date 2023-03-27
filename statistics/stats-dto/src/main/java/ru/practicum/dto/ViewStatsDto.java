@@ -6,7 +6,7 @@ public class ViewStatsDto {
 
     private String uri;
 
-    private Long hits;
+    private long hits;
 
     public String getApp() {
         return app;
@@ -24,11 +24,11 @@ public class ViewStatsDto {
         this.uri = uri;
     }
 
-    public Long getHits() {
+    public long getHits() {
         return hits;
     }
 
-    public void setHits(Long hits) {
+    public void setHits(long hits) {
         this.hits = hits;
     }
 }

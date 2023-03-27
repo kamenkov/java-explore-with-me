@@ -6,12 +6,12 @@ public class ViewStats {
 
     private String url;
 
-    private Long hits;
+    private long hits;
 
     public ViewStats() {
     }
 
-    public ViewStats(String app, String url, Long hits) {
+    public ViewStats(String app, String url, long hits) {
         this.app = app;
         this.url = url;
         this.hits = hits;
@@ -33,11 +33,11 @@ public class ViewStats {
         this.url = url;
     }
 
-    public Long getHits() {
+    public long getHits() {
         return hits;
     }
 
-    public void setHits(Long hits) {
+    public void setHits(long hits) {
         this.hits = hits;
     }
 
