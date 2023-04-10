@@ -1,5 +1,6 @@
 package ru.practicum.web.admin;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.category.CategoryDto;
@@ -24,6 +25,7 @@ public class AdminCategoryController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.CREATED)
     public CategoryDto create(@Valid @RequestBody NewCategoryDto newCategoryDto) {
         Category category = categoryMapper.newDtoMatToCategory(newCategoryDto);
         category = categoryService.create(category);
@@ -39,6 +41,7 @@ public class AdminCategoryController {
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remove(@PathVariable Long id) {
         categoryService.remove(id);
     }

@@ -1,22 +1,30 @@
 package ru.practicum.dto.event;
 
-public class EventRequestStatusUpdateResult {
-    private ParticipationRequestDto confirmedRequests;
-    private ParticipationRequestDto rejectedRequests;
+import java.util.List;
 
-    public ParticipationRequestDto getConfirmedRequests() {
+public class EventRequestStatusUpdateResult {
+    private List<ParticipationRequestDto> confirmedRequests;
+    private List<ParticipationRequestDto> rejectedRequests;
+
+    public EventRequestStatusUpdateResult(List<ParticipationRequestDto> confirmedRequests,
+                                          List<ParticipationRequestDto> rejectedRequests) {
+        this.confirmedRequests = confirmedRequests;
+        this.rejectedRequests = rejectedRequests;
+    }
+
+    public List<ParticipationRequestDto> getConfirmedRequests() {
         return confirmedRequests;
     }
 
-    public void setConfirmedRequests(ParticipationRequestDto confirmedRequests) {
+    public void setConfirmedRequests(List<ParticipationRequestDto> confirmedRequests) {
         this.confirmedRequests = confirmedRequests;
     }
 
-    public ParticipationRequestDto getRejectedRequests() {
+    public List<ParticipationRequestDto> getRejectedRequests() {
         return rejectedRequests;
     }
 
-    public void setRejectedRequests(ParticipationRequestDto rejectedRequests) {
+    public void setRejectedRequests(List<ParticipationRequestDto> rejectedRequests) {
         this.rejectedRequests = rejectedRequests;
     }
 }

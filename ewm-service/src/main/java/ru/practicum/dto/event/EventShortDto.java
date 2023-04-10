@@ -18,7 +18,7 @@ public class EventShortDto {
     @NotNull
     private CategoryDto category;
 
-    private long confirmedRequests;
+    private Long confirmedRequests;
 
     @NotNull
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
@@ -26,12 +26,12 @@ public class EventShortDto {
 
     private UserShortDto initiator;
 
-    private boolean paid;
+    private Boolean paid;
 
     @NotBlank
     private String title;
 
-    private long views;
+    private Long views;
 
     public Long getId() {
         return id;
@@ -57,11 +57,11 @@ public class EventShortDto {
         this.category = category;
     }
 
-    public long getConfirmedRequests() {
+    public Long getConfirmedRequests() {
         return confirmedRequests;
     }
 
-    public void setConfirmedRequests(long confirmedRequests) {
+    public void setConfirmedRequests(Long confirmedRequests) {
         this.confirmedRequests = confirmedRequests;
     }
 
@@ -81,11 +81,11 @@ public class EventShortDto {
         this.initiator = initiator;
     }
 
-    public boolean isPaid() {
+    public Boolean isPaid() {
         return paid;
     }
 
-    public void setPaid(boolean paid) {
+    public void setPaid(Boolean paid) {
         this.paid = paid;
     }
 
@@ -97,11 +97,11 @@ public class EventShortDto {
         this.title = title;
     }
 
-    public long getViews() {
+    public Long getViews() {
         return views;
     }
 
-    public void setViews(long views) {
+    public void setViews(Long views) {
         this.views = views;
     }
 }

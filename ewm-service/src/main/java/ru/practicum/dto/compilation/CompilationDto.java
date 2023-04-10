@@ -11,7 +11,7 @@ public class CompilationDto {
 
     private Long id;
 
-    private boolean pinned;
+    private Boolean pinned;
 
     @NotNull
     private String title;
@@ -32,11 +32,11 @@ public class CompilationDto {
         this.id = id;
     }
 
-    public boolean isPinned() {
+    public Boolean isPinned() {
         return pinned;
     }
 
-    public void setPinned(boolean pinned) {
+    public void setPinned(Boolean pinned) {
         this.pinned = pinned;
     }
 

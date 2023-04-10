@@ -1,5 +1,7 @@
 package ru.practicum.model;
 
+import org.hibernate.annotations.Formula;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -32,19 +34,28 @@ public class Event {
     @JoinColumn(name = "initiator_id")
     private User initiator;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "location_id")
     private Location location;
 
-    private boolean paid;
+    private Boolean paid;
 
-    private boolean requestModeration;
+    private Boolean requestModeration;
 
-    private EventState state;
+    @Enumerated(EnumType.STRING)
+    private EventState state = EventState.PENDING;
 
-    private int participantLimit;
+    private Integer participantLimit;
 
-    private long views;
+    @Formula("(SELECT COUNT(*) FROM request r WHERE r.event_id = id AND r.status = 'CONFIRMED')")
+    private Integer confirmedRequests;
+
+    private Long views = 0L;
+
+    @PrePersist
+    public void prePersist() {
+        createdOn = LocalDateTime.now();
+    }
 
     public Long getId() {
         return id;
@@ -126,19 +137,19 @@ public class Event {
         this.location = location;
     }
 
-    public boolean isPaid() {
+    public Boolean isPaid() {
         return paid;
     }
 
-    public void setPaid(boolean paid) {
+    public void setPaid(Boolean paid) {
         this.paid = paid;
     }
 
-    public boolean isRequestModeration() {
+    public Boolean isRequestModeration() {
         return requestModeration;
     }
 
-    public void setRequestModeration(boolean requestModeration) {
+    public void setRequestModeration(Boolean requestModeration) {
         this.requestModeration = requestModeration;
     }
 
@@ -150,19 +161,27 @@ public class Event {
         this.state = state;
     }
 
-    public int getParticipantLimit() {
+    public Integer getParticipantLimit() {
         return participantLimit;
     }
 
-    public void setParticipantLimit(int participantLimit) {
+    public void setParticipantLimit(Integer participantLimit) {
         this.participantLimit = participantLimit;
     }
 
-    public long getViews() {
+    public Integer getConfirmedRequests() {
+        return confirmedRequests;
+    }
+
+    public void setConfirmedRequests(Integer confirmedRequests) {
+        this.confirmedRequests = confirmedRequests;
+    }
+
+    public Long getViews() {
         return views;
     }
 
-    public void setViews(long views) {
+    public void setViews(Long views) {
         this.views = views;
     }
 

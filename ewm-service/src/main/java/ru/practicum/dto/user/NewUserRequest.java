@@ -1,12 +1,13 @@
 package ru.practicum.dto.user;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 public class NewUserRequest {
 
     @NotNull
-    @NotNull
+    @Email
     private String email;
 
     @NotBlank

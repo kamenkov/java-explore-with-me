@@ -42,13 +42,15 @@ public class EventFullDto {
 
     private boolean paid;
 
-    private boolean requestModeration;
+    private Boolean requestModeration;
 
     private EventState state;
 
     private int participantLimit;
 
-    private long views;
+    private Integer confirmedRequests;
+
+    private Long views;
 
     public Long getId() {
         return id;
@@ -138,11 +140,11 @@ public class EventFullDto {
         this.paid = paid;
     }
 
-    public boolean isRequestModeration() {
+    public Boolean isRequestModeration() {
         return requestModeration;
     }
 
-    public void setRequestModeration(boolean requestModeration) {
+    public void setRequestModeration(Boolean requestModeration) {
         this.requestModeration = requestModeration;
     }
 
@@ -162,11 +164,19 @@ public class EventFullDto {
         this.participantLimit = participantLimit;
     }
 
-    public long getViews() {
+    public Integer getConfirmedRequests() {
+        return confirmedRequests;
+    }
+
+    public void setConfirmedRequests(Integer confirmedRequests) {
+        this.confirmedRequests = confirmedRequests;
+    }
+
+    public Long getViews() {
         return views;
     }
 
-    public void setViews(long views) {
+    public void setViews(Long views) {
         this.views = views;
     }
 }

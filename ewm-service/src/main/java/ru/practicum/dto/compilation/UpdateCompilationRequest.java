@@ -1,30 +1,28 @@
 package ru.practicum.dto.compilation;
 
-import ru.practicum.dto.event.EventShortDto;
-
 import java.util.List;
 
 public class UpdateCompilationRequest {
 
-    private List<EventShortDto> events;
+    private List<Long> events;
 
-    private boolean pinned;
+    private Boolean pinned;
 
     private String title;
 
-    public List<EventShortDto> getEvents() {
+    public List<Long> getEvents() {
         return events;
     }
 
-    public void setEvents(List<EventShortDto> events) {
+    public void setEvents(List<Long> events) {
         this.events = events;
     }
 
-    public boolean isPinned() {
+    public Boolean isPinned() {
         return pinned;
     }
 
-    public void setPinned(boolean pinned) {
+    public void setPinned(Boolean pinned) {
         this.pinned = pinned;
     }
 

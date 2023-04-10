@@ -1,5 +1,6 @@
 package ru.practicum.web.admin;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.compilation.CompilationDto;
@@ -26,6 +27,7 @@ public class AdminCompilationController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.CREATED)
     public CompilationDto create(@Valid @RequestBody NewCompilationDto newCompilationDto) {
         Compilation compilation = compilationMapper.newDtoMapToCompilation(newCompilationDto);
         compilation = compilationService.create(compilation);
@@ -41,6 +43,7 @@ public class AdminCompilationController {
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remove(@PathVariable Long id) {
         compilationService.remove(id);
     }

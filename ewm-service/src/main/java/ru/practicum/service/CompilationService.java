@@ -1,9 +1,13 @@
 package ru.practicum.service;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.practicum.mapper.CompilationMapper;
 import ru.practicum.model.Compilation;
 import ru.practicum.repository.CompilationRepository;
+
+import java.util.List;
 
 import static ru.practicum.handler.exception.NotFoundException.notFoundException;
 
@@ -31,7 +35,7 @@ public class CompilationService {
         return compilationRepository.save(compilation);
     }
 
-    private Compilation findById(Long id) {
+    public Compilation findById(Long id) {
         return compilationRepository
                 .findById(id)
                 .orElseThrow(notFoundException("Compilation not found {0}", id));
@@ -40,5 +44,10 @@ public class CompilationService {
     public void remove(Long id) {
         Compilation compilation = findById(id);
         compilationRepository.delete(compilation);
+    }
+
+    public List<Compilation> publicSearch(boolean pinned, int from, int size) {
+        Pageable pageable = PageRequest.of(from / size, size);
+        return compilationRepository.findByPinned(pinned, pageable).getContent();
     }
 }

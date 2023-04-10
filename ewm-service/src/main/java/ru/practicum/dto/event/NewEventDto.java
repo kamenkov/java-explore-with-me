@@ -1,8 +1,7 @@
 package ru.practicum.dto.event;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import ru.practicum.dto.category.CategoryDto;
-import ru.practicum.dto.user.UserShortDto;
+import ru.practicum.constraint.FutureTime;
 import ru.practicum.model.Location;
 
 import javax.validation.constraints.NotBlank;
@@ -15,15 +14,14 @@ public class NewEventDto {
     private String annotation;
 
     @NotNull
-    private CategoryDto category;
+    private Long category;
 
     @NotNull
+    @FutureTime(hours = 2)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime eventDate;
 
-    private UserShortDto initiator;
-
-    private boolean paid;
+    private Boolean paid;
 
     @NotBlank
     private String title;
@@ -34,9 +32,9 @@ public class NewEventDto {
     @NotNull
     private Location location;
 
-    private int participantLimit;
+    private Integer participantLimit;
 
-    private boolean requestModeration;
+    private Boolean requestModeration;
 
     public String getAnnotation() {
         return annotation;
@@ -46,11 +44,11 @@ public class NewEventDto {
         this.annotation = annotation;
     }
 
-    public CategoryDto getCategory() {
+    public Long getCategory() {
         return category;
     }
 
-    public void setCategory(CategoryDto category) {
+    public void setCategory(Long category) {
         this.category = category;
     }
 
@@ -62,19 +60,11 @@ public class NewEventDto {
         this.eventDate = eventDate;
     }
 
-    public UserShortDto getInitiator() {
-        return initiator;
-    }
-
-    public void setInitiator(UserShortDto initiator) {
-        this.initiator = initiator;
-    }
-
-    public boolean isPaid() {
+    public Boolean isPaid() {
         return paid;
     }
 
-    public void setPaid(boolean paid) {
+    public void setPaid(Boolean paid) {
         this.paid = paid;
     }
 
@@ -102,19 +92,19 @@ public class NewEventDto {
         this.location = location;
     }
 
-    public int getParticipantLimit() {
+    public Integer getParticipantLimit() {
         return participantLimit;
     }
 
-    public void setParticipantLimit(int participantLimit) {
+    public void setParticipantLimit(Integer participantLimit) {
         this.participantLimit = participantLimit;
     }
 
-    public boolean isRequestModeration() {
+    public Boolean isRequestModeration() {
         return requestModeration;
     }
 
-    public void setRequestModeration(boolean requestModeration) {
+    public void setRequestModeration(Boolean requestModeration) {
         this.requestModeration = requestModeration;
     }
 }

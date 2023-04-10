@@ -21,7 +21,13 @@ public class Request {
 
     private LocalDateTime created;
 
+    @Enumerated(EnumType.STRING)
     private RequestStatus status;
+
+    @PrePersist
+    public void prePersist() {
+        created = LocalDateTime.now();
+    }
 
     public Long getId() {
         return id;
@@ -62,4 +68,5 @@ public class Request {
     public void setStatus(RequestStatus status) {
         this.status = status;
     }
+
 }

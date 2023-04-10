@@ -1,9 +1,9 @@
 package ru.practicum.dto.event;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import ru.practicum.dto.category.CategoryDto;
-import ru.practicum.model.EventState;
+import ru.practicum.constraint.FutureTime;
 import ru.practicum.model.Location;
+import ru.practicum.model.StateAction;
 
 import java.time.LocalDateTime;
 
@@ -11,9 +11,10 @@ public class UpdateEventAdminRequest {
 
     private String annotation;
 
-    private CategoryDto category;
+    private Long category;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @FutureTime
     private LocalDateTime eventDate;
 
     private String title;
@@ -22,13 +23,13 @@ public class UpdateEventAdminRequest {
 
     private Location location;
 
-    private boolean paid;
+    private Boolean paid;
 
-    private boolean requestModeration;
+    private Boolean requestModeration;
 
-    private EventState stateAction;
+    private StateAction stateAction;
 
-    private int participantLimit;
+    private Integer participantLimit;
 
     public String getAnnotation() {
         return annotation;
@@ -38,11 +39,11 @@ public class UpdateEventAdminRequest {
         this.annotation = annotation;
     }
 
-    public CategoryDto getCategory() {
+    public Long getCategory() {
         return category;
     }
 
-    public void setCategory(CategoryDto category) {
+    public void setCategory(Long category) {
         this.category = category;
     }
 
@@ -78,35 +79,35 @@ public class UpdateEventAdminRequest {
         this.location = location;
     }
 
-    public boolean isPaid() {
+    public Boolean isPaid() {
         return paid;
     }
 
-    public void setPaid(boolean paid) {
+    public void setPaid(Boolean paid) {
         this.paid = paid;
     }
 
-    public boolean isRequestModeration() {
+    public Boolean isRequestModeration() {
         return requestModeration;
     }
 
-    public void setRequestModeration(boolean requestModeration) {
+    public void setRequestModeration(Boolean requestModeration) {
         this.requestModeration = requestModeration;
     }
 
-    public EventState getStateAction() {
+    public StateAction getStateAction() {
         return stateAction;
     }
 
-    public void setStateAction(EventState stateAction) {
+    public void setStateAction(StateAction stateAction) {
         this.stateAction = stateAction;
     }
 
-    public int getParticipantLimit() {
+    public Integer getParticipantLimit() {
         return participantLimit;
     }
 
-    public void setParticipantLimit(int participantLimit) {
+    public void setParticipantLimit(Integer participantLimit) {
         this.participantLimit = participantLimit;
     }
 }

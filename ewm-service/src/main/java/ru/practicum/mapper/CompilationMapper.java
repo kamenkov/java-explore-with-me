@@ -1,24 +1,29 @@
 package ru.practicum.mapper;
 
-import org.mapstruct.BeanMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import ru.practicum.dto.compilation.CompilationDto;
 import ru.practicum.dto.compilation.NewCompilationDto;
 import ru.practicum.dto.compilation.UpdateCompilationRequest;
 import ru.practicum.model.Compilation;
+import ru.practicum.service.EventService;
 
-@Mapper
-public interface CompilationMapper {
+@Mapper(componentModel = "spring")
+public abstract class CompilationMapper {
 
-    Compilation newDtoMapToCompilation(NewCompilationDto newCompilationDto);
+    @Autowired
+    protected EventService eventService;
 
-    Compilation updateCompilationRequestMapToCompilation(UpdateCompilationRequest updateCompilationRequest);
+    @Mapping(target = "events", expression = "java( eventService.findByIds(newCompilationDto.getEvents()) )")
+    public abstract Compilation newDtoMapToCompilation(NewCompilationDto newCompilationDto);
 
-    CompilationDto mapCompilationToDto(Compilation compilation);
+    @Mapping(target = "events", expression = "java( eventService.findByIds(updateCompilationRequest.getEvents()) )")
+    public abstract Compilation updateCompilationRequestMapToCompilation(UpdateCompilationRequest updateCompilationRequest);
+
+    public abstract CompilationDto mapCompilationToDto(Compilation compilation);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateCompilation(Compilation from, @MappingTarget Compilation to);
+    public abstract void updateCompilation(Compilation from, @MappingTarget Compilation to);
+
 }
 

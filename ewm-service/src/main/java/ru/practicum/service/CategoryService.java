@@ -1,9 +1,13 @@
 package ru.practicum.service;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.practicum.mapper.CategoryMapper;
 import ru.practicum.model.Category;
 import ru.practicum.repository.CategoryRepository;
+
+import java.util.List;
 
 import static ru.practicum.handler.exception.NotFoundException.notFoundException;
 
@@ -29,7 +33,12 @@ public class CategoryService {
         return categoryRepository.save(savedCategory);
     }
 
-    private Category findById(Long id) {
+    public List<Category> search(int from, int size) {
+        Pageable pageable = PageRequest.of(from / size, size);
+        return categoryRepository.findAll(pageable).getContent();
+    }
+
+    public Category findById(Long id) {
         return categoryRepository
                 .findById(id)
                 .orElseThrow(notFoundException("Category not found {0}", id));
