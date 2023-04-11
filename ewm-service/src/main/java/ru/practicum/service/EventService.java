@@ -71,10 +71,15 @@ public class EventService {
             throw new ConflictException("Only pending or canceled events can be changed");
         }
         if (action != null) {
-            if (action == StateAction.CANCEL_REVIEW) {
-                savedEvent.setState(EventState.CANCELED);
-            } else {
-                throw new BadRequestException("Wrong state action {0}", action);
+            switch (action) {
+                case CANCEL_REVIEW:
+                    savedEvent.setState(EventState.CANCELED);
+                    break;
+                case SEND_TO_REVIEW:
+                    savedEvent.setState(EventState.PENDING);
+                    break;
+                default:
+                    throw new BadRequestException("Wrong state action {0}", action);
             }
         }
         eventMapper.updateEvent(event, savedEvent);
@@ -89,7 +94,7 @@ public class EventService {
                               int from,
                               int size) {
         Pageable pageable = PageRequest.of(from / size, size);
-        return eventRepository.findByInitiatorIdInAndStateInAndCategoryIdInAndEventDateBetween(users,
+        return eventRepository.adminEventSearch(users,
                 states,
                 categories,
                 rangeStart,
@@ -122,10 +127,10 @@ public class EventService {
 
     public List<Event> publicSearch(String text,
                                     Set<Long> categories,
-                                    boolean paid,
+                                    Boolean paid,
                                     LocalDateTime rangeStart,
                                     LocalDateTime rangeEnd,
-                                    boolean onlyAvailable,
+                                    Boolean onlyAvailable,
                                     String sort,
                                     int from,
                                     int size) {

@@ -20,7 +20,7 @@ public class Event {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    private LocalDateTime createdOn;
+    private LocalDateTime createdOn = LocalDateTime.now();
 
     private LocalDateTime publishedOn;
 
@@ -51,11 +51,6 @@ public class Event {
     private Integer confirmedRequests;
 
     private Long views = 0L;
-
-    @PrePersist
-    public void prePersist() {
-        createdOn = LocalDateTime.now();
-    }
 
     public Long getId() {
         return id;

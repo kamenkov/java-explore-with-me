@@ -28,17 +28,17 @@ public class PublicEventController {
 
     @Transactional(readOnly = true)
     @GetMapping
-    public List<EventFullDto> search(@RequestParam(required = false) String text,
+    public List<EventFullDto> search(@RequestParam(required = false, defaultValue = "") String text,
                                      @RequestParam(required = false) Set<Long> categories,
-                                     @RequestParam(required = false) boolean paid,
+                                     @RequestParam(required = false) Boolean paid,
                                      @RequestParam(required = false)
                                      @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
                                      LocalDateTime rangeStart,
                                      @RequestParam(required = false)
                                      @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
                                      LocalDateTime rangeEnd,
-                                     @RequestParam(required = false) boolean onlyAvailable,
-                                     @RequestParam(required = false) String sort,
+                                     @RequestParam(required = false) Boolean onlyAvailable,
+                                     @RequestParam(required = false, defaultValue = "EVENT_DATE") String sort,
                                      @RequestParam(defaultValue = "0") int from,
                                      @RequestParam(defaultValue = "10") int size) {
         List<Event> events = eventService.publicSearch(text,

@@ -19,15 +19,10 @@ public class Request {
     @JoinColumn(name = "event_id")
     private Event event;
 
-    private LocalDateTime created;
+    private LocalDateTime created = LocalDateTime.now();
 
     @Enumerated(EnumType.STRING)
     private RequestStatus status;
-
-    @PrePersist
-    public void prePersist() {
-        created = LocalDateTime.now();
-    }
 
     public Long getId() {
         return id;

@@ -1,6 +1,7 @@
 package ru.practicum.constraint.validator;
 
 import ru.practicum.constraint.FutureTime;
+import ru.practicum.handler.exception.ConflictException;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -24,6 +25,11 @@ public class FutureTimeValidator implements ConstraintValidator<FutureTime, Loca
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime minDate = now.plusHours(hours);
 
-        return value.isAfter(minDate);
+        if (!value.isAfter(minDate)) {
+            throw new ConflictException("Event date should be after than {0} hours", hours);
+        }
+        return true;
     }
+
+
 }
