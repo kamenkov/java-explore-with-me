@@ -4,6 +4,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.handler.exception.BadRequestException;
 import ru.practicum.handler.exception.ConflictException;
 import ru.practicum.mapper.EventMapper;
@@ -22,6 +23,7 @@ import static ru.practicum.handler.exception.NotFoundException.notFoundException
 @Service
 public class EventService {
 
+    public static final String EVENT_NOT_FOUND = "Event {0} not found";
     private final UserService userService;
     private final EventMapper eventMapper;
     private final EventRepository eventRepository;
@@ -40,13 +42,16 @@ public class EventService {
         return eventRepository.save(event);
     }
 
+    @Transactional
     public Event publicFindById(Long id) {
-        return eventRepository.findByStateAndId(EventState.PUBLISHED, id)
-                .orElseThrow(notFoundException("Event {0} not found", id));
+        Event event = eventRepository.findByStateAndId(EventState.PUBLISHED, id)
+                .orElseThrow(notFoundException(EVENT_NOT_FOUND, id));
+        event.setViews(event.getViews() + 1);
+        return event;
     }
 
     public Event findById(Long id) {
-        return eventRepository.findById(id).orElseThrow(notFoundException("Event {0} not found", id));
+        return eventRepository.findById(id).orElseThrow(notFoundException(EVENT_NOT_FOUND, id));
     }
 
     public List<Event> findByIds(List<Long> eventIds) {
@@ -62,7 +67,7 @@ public class EventService {
     public Event findUserEvent(Long userId, Long eventId) {
         User initiator = userService.findById(userId);
         return eventRepository.findEventByIdAndInitiator(eventId, initiator)
-                .orElseThrow(notFoundException("Event {0} not found", eventId));
+                .orElseThrow(notFoundException(EVENT_NOT_FOUND, eventId));
     }
 
     public Event updateEventByUser(Long userId, Long eventId, Event event, StateAction action) {
@@ -94,6 +99,12 @@ public class EventService {
                               int from,
                               int size) {
         Pageable pageable = PageRequest.of(from / size, size);
+        if (rangeStart == null) {
+            rangeStart = LocalDateTime.now();
+        }
+        if (rangeEnd == null) {
+            rangeEnd = LocalDateTime.now().plusYears(1000L);
+        }
         return eventRepository.adminEventSearch(users,
                 states,
                 categories,
@@ -104,7 +115,7 @@ public class EventService {
 
     public Event updateEventByAdmin(Long eventId, Event event, StateAction action) {
         Event savedEvent = eventRepository.findById(eventId)
-                .orElseThrow(notFoundException("Event {0} not found", eventId));
+                .orElseThrow(notFoundException(EVENT_NOT_FOUND, eventId));
         if (savedEvent.getState() != EventState.PENDING) {
             throw new ConflictException("Event not in the Pending state. Current state: {0}", savedEvent.getState());
         }
@@ -125,6 +136,7 @@ public class EventService {
         return eventRepository.save(savedEvent);
     }
 
+    @Transactional
     public List<Event> publicSearch(String text,
                                     Set<Long> categories,
                                     Boolean paid,
@@ -151,9 +163,9 @@ public class EventService {
             rangeStart = LocalDateTime.now();
         }
         if (rangeEnd == null) {
-            rangeEnd = LocalDateTime.MAX;
+            rangeEnd = LocalDateTime.now().plusYears(1000L);
         }
-        return eventRepository.publicEventSearch(text,
+        List<Event> events = eventRepository.publicEventSearch(text,
                 categories,
                 paid,
                 rangeStart,
@@ -161,5 +173,11 @@ public class EventService {
                 onlyAvailable,
                 EventState.PUBLISHED,
                 pageable).getContent();
+
+        for (Event event : events) {
+            event.setViews(event.getViews() + 1);
+        }
+
+        return events;
     }
 }
