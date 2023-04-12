@@ -29,7 +29,6 @@ CREATE TABLE IF NOT EXISTS event
     request_moderation BOOLEAN                                 NOT NULL,
     state              VARCHAR(10),
     participant_limit  INTEGER                                 NOT NULL,
-    views              BIGINT                                  NOT NULL,
     lat                FLOAT                                   NOT NULL,
     lon                FLOAT                                   NOT NULL,
     CONSTRAINT pk_event PRIMARY KEY (id),

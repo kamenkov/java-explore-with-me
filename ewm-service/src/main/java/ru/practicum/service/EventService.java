@@ -1,10 +1,12 @@
 package ru.practicum.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.client.StatsClient;
 import ru.practicum.dto.event.UpdateEventAdminRequest;
 import ru.practicum.dto.event.UpdateEventUserRequest;
 import ru.practicum.handler.exception.BadRequestException;
@@ -16,8 +18,10 @@ import ru.practicum.model.User;
 import ru.practicum.repository.EventRepository;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static ru.practicum.handler.exception.NotFoundException.notFoundException;
 
@@ -28,13 +32,17 @@ public class EventService {
     private final UserService userService;
     private final EventMapper eventMapper;
     private final EventRepository eventRepository;
+    private final StatsClient statsClient;
 
+    @Autowired
     public EventService(UserService userService,
                         EventMapper eventMapper,
-                        EventRepository eventRepository) {
+                        EventRepository eventRepository,
+                        StatsClient statsClient) {
         this.userService = userService;
         this.eventMapper = eventMapper;
         this.eventRepository = eventRepository;
+        this.statsClient = statsClient;
     }
 
     public Event create(Long userId, Event event) {
@@ -151,17 +159,18 @@ public class EventService {
                                     int size) {
         Sort.TypedSort<Event> eventSort = Sort.sort(Event.class);
         Sort sorting;
+        Pageable pageable;
         switch (sort) {
             case "EVENT_DATE":
                 sorting = eventSort.by(Event::getEventDate).descending();
+                pageable = PageRequest.of(from / size, size, sorting);
                 break;
             case "VIEWS":
-                sorting = eventSort.by(Event::getViews).descending();
+                pageable = Pageable.unpaged();
                 break;
             default:
                 throw new BadRequestException("Unavailable sorting option");
         }
-        Pageable pageable = PageRequest.of(from / size, size, sorting);
         if (rangeStart == null) {
             rangeStart = LocalDateTime.now();
         }
@@ -178,9 +187,15 @@ public class EventService {
                 pageable).getContent();
 
         for (Event event : events) {
-            event.setViews(event.getViews() + 1);
+            event.setViews(statsClient.getViews(event.getId()));
         }
-
+        if ("VIEWS".equals(sort)) {
+            return events.stream()
+                    .sorted(Comparator.comparingLong(Event::getViews).reversed())
+                    .skip(from)
+                    .limit(size)
+                    .collect(Collectors.toList());
+        }
         return events;
     }
 }

@@ -49,6 +49,7 @@ public class Event {
     @Formula("(SELECT COUNT(*) FROM request r WHERE r.event_id = id AND r.status = 'CONFIRMED')")
     private Integer confirmedRequests;
 
+    @Transient
     private Long views = 0L;
 
     public Long getId() {
