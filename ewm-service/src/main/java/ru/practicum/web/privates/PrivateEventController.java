@@ -49,7 +49,7 @@ public class PrivateEventController {
     public EventFullDto create(@PathVariable Long userId,
                                @Valid @RequestBody NewEventDto newEventDto) {
         Event event = eventMapper.newEventDtoMapToEvent(newEventDto);
-        event = eventService.create(userId, event);
+        event = eventService.create(userId, event, newEventDto.getCategory());
         return eventMapper.eventMapToFullDto(event);
     }
 
@@ -66,7 +66,9 @@ public class PrivateEventController {
                                     @PathVariable Long eventId,
                                     @Valid @RequestBody UpdateEventUserRequest updateEventUserRequest) {
         Event event = eventMapper.updateEventUserRequestMapToEvent(updateEventUserRequest);
-        event = eventService.updateEventByUser(userId, eventId, event, updateEventUserRequest.getStateAction());
+        event = eventService.updateEventByUser(userId, eventId, event,
+                updateEventUserRequest.getStateAction(),
+                updateEventUserRequest.getCategory());
         return eventMapper.eventMapToFullDto(event);
     }
 

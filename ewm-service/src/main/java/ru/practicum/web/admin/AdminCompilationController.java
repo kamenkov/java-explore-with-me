@@ -30,7 +30,7 @@ public class AdminCompilationController {
     @ResponseStatus(HttpStatus.CREATED)
     public CompilationDto create(@Valid @RequestBody NewCompilationDto newCompilationDto) {
         Compilation compilation = compilationMapper.newDtoMapToCompilation(newCompilationDto);
-        compilation = compilationService.create(compilation);
+        compilation = compilationService.create(compilation, newCompilationDto.getEvents());
         return compilationMapper.mapCompilationToDto(compilation);
     }
 
@@ -38,7 +38,7 @@ public class AdminCompilationController {
     public CompilationDto update(@PathVariable Long id,
                                  @RequestBody UpdateCompilationRequest updateCompilationRequest) {
         Compilation compilation = compilationMapper.updateCompilationRequestMapToCompilation(updateCompilationRequest);
-        compilation = compilationService.update(id, compilation);
+        compilation = compilationService.update(id, compilation, updateCompilationRequest.getEvents());
         return compilationMapper.mapCompilationToDto(compilation);
     }
 

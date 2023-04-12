@@ -12,6 +12,7 @@ import ru.practicum.dto.event.UpdateEventUserRequest;
 import ru.practicum.handler.exception.BadRequestException;
 import ru.practicum.handler.exception.ConflictException;
 import ru.practicum.mapper.EventMapper;
+import ru.practicum.model.Category;
 import ru.practicum.model.Event;
 import ru.practicum.model.EventState;
 import ru.practicum.model.User;
@@ -30,24 +31,29 @@ public class EventService {
 
     public static final String EVENT_NOT_FOUND = "Event {0} not found";
     private final UserService userService;
+    private final CategoryService categoryService;
     private final EventMapper eventMapper;
     private final EventRepository eventRepository;
     private final StatsClient statsClient;
 
     @Autowired
     public EventService(UserService userService,
+                        CategoryService categoryService,
                         EventMapper eventMapper,
                         EventRepository eventRepository,
                         StatsClient statsClient) {
         this.userService = userService;
+        this.categoryService = categoryService;
         this.eventMapper = eventMapper;
         this.eventRepository = eventRepository;
         this.statsClient = statsClient;
     }
 
-    public Event create(Long userId, Event event) {
+    public Event create(Long userId, Event event, Long categoryId) {
         User initiator = userService.findById(userId);
+        Category category = categoryService.findById(categoryId);
         event.setInitiator(initiator);
+        event.setCategory(category);
         return eventRepository.save(event);
     }
 
@@ -80,10 +86,15 @@ public class EventService {
                 .orElseThrow(notFoundException(EVENT_NOT_FOUND, eventId));
     }
 
-    public Event updateEventByUser(Long userId, Long eventId, Event event, UpdateEventUserRequest.StateAction action) {
+    public Event updateEventByUser(Long userId, Long eventId, Event event,
+                                   UpdateEventUserRequest.StateAction action, Long categoryId) {
         Event savedEvent = findUserEvent(userId, eventId);
         if (savedEvent.getState() == EventState.PUBLISHED) {
             throw new ConflictException("Only pending or canceled events can be changed");
+        }
+        Category category = categoryService.findById(categoryId);
+        if (category != null) {
+            savedEvent.setCategory(category);
         }
         if (action != null) {
             switch (action) {
@@ -124,11 +135,16 @@ public class EventService {
                 pageable).getContent();
     }
 
-    public Event updateEventByAdmin(Long eventId, Event event, UpdateEventAdminRequest.StateAction action) {
+    public Event updateEventByAdmin(Long eventId, Event event,
+                                    UpdateEventAdminRequest.StateAction action, Long categoryId) {
         Event savedEvent = eventRepository.findById(eventId)
                 .orElseThrow(notFoundException(EVENT_NOT_FOUND, eventId));
         if (savedEvent.getState() != EventState.PENDING) {
             throw new ConflictException("Event not in the Pending state. Current state: {0}", savedEvent.getState());
+        }
+        Category category = categoryService.findById(categoryId);
+        if (category != null) {
+            savedEvent.setCategory(category);
         }
         if (action != null) {
             switch (action) {

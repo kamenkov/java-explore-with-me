@@ -41,6 +41,9 @@ public class CategoryService {
     }
 
     public Category findById(Long id) {
+        if (id == null) {
+            return null;
+        }
         return categoryRepository
                 .findById(id)
                 .orElseThrow(notFoundException("Category not found {0}", id));

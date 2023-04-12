@@ -49,7 +49,7 @@ public class AdminEventController {
                                @Valid @RequestBody UpdateEventAdminRequest updateEventAdminRequest) {
         Event event = eventMapper.updateEventAdminRequestMapToEvent(updateEventAdminRequest);
         UpdateEventAdminRequest.StateAction action = updateEventAdminRequest.getStateAction();
-        event = eventService.updateEventByAdmin(id, event, action);
+        event = eventService.updateEventByAdmin(id, event, action, updateEventAdminRequest.getCategory());
         return eventMapper.eventMapToFullDto(event);
     }
 }

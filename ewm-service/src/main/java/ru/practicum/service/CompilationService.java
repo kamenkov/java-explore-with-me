@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.mapper.CompilationMapper;
 import ru.practicum.model.Compilation;
+import ru.practicum.model.Event;
 import ru.practicum.repository.CompilationRepository;
 
 import java.util.List;
@@ -17,23 +18,31 @@ public class CompilationService {
 
     private final CompilationRepository compilationRepository;
 
+    private final EventService eventService;
+
     private final CompilationMapper compilationMapper;
 
     public CompilationService(CompilationRepository compilationRepository,
+                              EventService eventService,
                               CompilationMapper compilationMapper) {
         this.compilationRepository = compilationRepository;
+        this.eventService = eventService;
         this.compilationMapper = compilationMapper;
     }
 
-    public Compilation create(Compilation compilation) {
+    public Compilation create(Compilation compilation, List<Long> eventIds) {
+        List<Event> events = eventService.findByIds(eventIds);
+        compilation.setEvents(events);
         compilation = compilationRepository.save(compilation);
         return compilation;
     }
 
-    public Compilation update(Long id, Compilation compilation) {
+    public Compilation update(Long id, Compilation compilation, List<Long> eventIds) {
         Compilation savedCompilation = findById(id);
         compilationMapper.updateCompilation(compilation, savedCompilation);
-        return compilationRepository.save(compilation);
+        List<Event> events = eventService.findByIds(eventIds);
+        savedCompilation.setEvents(events);
+        return compilationRepository.save(savedCompilation);
     }
 
     public Compilation findById(Long id) {
