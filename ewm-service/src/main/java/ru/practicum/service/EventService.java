@@ -5,12 +5,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.dto.event.UpdateEventAdminRequest;
+import ru.practicum.dto.event.UpdateEventUserRequest;
 import ru.practicum.handler.exception.BadRequestException;
 import ru.practicum.handler.exception.ConflictException;
 import ru.practicum.mapper.EventMapper;
 import ru.practicum.model.Event;
 import ru.practicum.model.EventState;
-import ru.practicum.model.StateAction;
 import ru.practicum.model.User;
 import ru.practicum.repository.EventRepository;
 
@@ -71,7 +72,7 @@ public class EventService {
                 .orElseThrow(notFoundException(EVENT_NOT_FOUND, eventId));
     }
 
-    public Event updateEventByUser(Long userId, Long eventId, Event event, StateAction action) {
+    public Event updateEventByUser(Long userId, Long eventId, Event event, UpdateEventUserRequest.StateAction action) {
         Event savedEvent = findUserEvent(userId, eventId);
         if (savedEvent.getState() == EventState.PUBLISHED) {
             throw new ConflictException("Only pending or canceled events can be changed");
@@ -115,7 +116,7 @@ public class EventService {
                 pageable).getContent();
     }
 
-    public Event updateEventByAdmin(Long eventId, Event event, StateAction action) {
+    public Event updateEventByAdmin(Long eventId, Event event, UpdateEventAdminRequest.StateAction action) {
         Event savedEvent = eventRepository.findById(eventId)
                 .orElseThrow(notFoundException(EVENT_NOT_FOUND, eventId));
         if (savedEvent.getState() != EventState.PENDING) {

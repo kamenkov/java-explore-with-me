@@ -7,7 +7,6 @@ import ru.practicum.dto.event.UpdateEventAdminRequest;
 import ru.practicum.mapper.EventMapper;
 import ru.practicum.model.Event;
 import ru.practicum.model.EventState;
-import ru.practicum.model.StateAction;
 import ru.practicum.service.EventService;
 
 import javax.validation.Valid;
@@ -49,7 +48,7 @@ public class AdminEventController {
     public EventFullDto update(@PathVariable Long id,
                                @Valid @RequestBody UpdateEventAdminRequest updateEventAdminRequest) {
         Event event = eventMapper.updateEventAdminRequestMapToEvent(updateEventAdminRequest);
-        StateAction action = updateEventAdminRequest.getStateAction();
+        UpdateEventAdminRequest.StateAction action = updateEventAdminRequest.getStateAction();
         event = eventService.updateEventByAdmin(id, event, action);
         return eventMapper.eventMapToFullDto(event);
     }
