@@ -1,15 +1,17 @@
 package ru.practicum.dto.compilation;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 public class NewCompilationDto {
 
     private List<Long> events;
 
-    private Boolean pinned;
+    private boolean pinned;
 
     @NotBlank
+    @Size(max = 255)
     private String title;
 
     public List<Long> getEvents() {

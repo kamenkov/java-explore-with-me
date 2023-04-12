@@ -1,6 +1,7 @@
 package ru.practicum.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.dto.event.EventRequestStatusUpdateRequest;
 import ru.practicum.dto.event.EventRequestStatusUpdateResult;
 import ru.practicum.dto.event.ParticipationRequestDto;
@@ -75,6 +76,7 @@ public class RequestService {
         return new EventRequestStatusUpdateResult(confirmedRequests, rejectedRequests);
     }
 
+    @Transactional(readOnly = true)
     public List<Request> getRequestsByUserId(Long id) {
         return requestRepository.findByRequesterId(id);
     }

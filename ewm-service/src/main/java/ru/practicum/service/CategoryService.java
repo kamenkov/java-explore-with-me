@@ -3,6 +3,7 @@ package ru.practicum.service;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.mapper.CategoryMapper;
 import ru.practicum.model.Category;
 import ru.practicum.repository.CategoryRepository;
@@ -33,6 +34,7 @@ public class CategoryService {
         return categoryRepository.save(savedCategory);
     }
 
+    @Transactional(readOnly = true)
     public List<Category> search(int from, int size) {
         Pageable pageable = PageRequest.of(from / size, size);
         return categoryRepository.findAll(pageable).getContent();

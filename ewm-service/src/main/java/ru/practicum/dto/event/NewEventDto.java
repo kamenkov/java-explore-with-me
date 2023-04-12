@@ -2,10 +2,13 @@ package ru.practicum.dto.event;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import ru.practicum.constraint.FutureTime;
-import ru.practicum.model.Location;
+import ru.practicum.dto.location.LocationDto;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 public class NewEventDto {
@@ -21,20 +24,23 @@ public class NewEventDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime eventDate;
 
-    private Boolean paid;
+    private boolean paid;
 
     @NotBlank
+    @Size(max = 255)
     private String title;
 
     @NotBlank
     private String description;
 
     @NotNull
-    private Location location;
+    @Valid
+    private LocationDto location;
 
-    private Integer participantLimit;
+    @PositiveOrZero
+    private int participantLimit;
 
-    private Boolean requestModeration;
+    private boolean requestModeration = true;
 
     public String getAnnotation() {
         return annotation;
@@ -64,7 +70,7 @@ public class NewEventDto {
         return paid;
     }
 
-    public void setPaid(Boolean paid) {
+    public void setPaid(boolean paid) {
         this.paid = paid;
     }
 
@@ -84,19 +90,19 @@ public class NewEventDto {
         this.description = description;
     }
 
-    public Location getLocation() {
+    public LocationDto getLocation() {
         return location;
     }
 
-    public void setLocation(Location location) {
+    public void setLocation(LocationDto location) {
         this.location = location;
     }
 
-    public Integer getParticipantLimit() {
+    public int getParticipantLimit() {
         return participantLimit;
     }
 
-    public void setParticipantLimit(Integer participantLimit) {
+    public void setParticipantLimit(int participantLimit) {
         this.participantLimit = participantLimit;
     }
 

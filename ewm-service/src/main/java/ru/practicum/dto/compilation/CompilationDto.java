@@ -2,7 +2,6 @@ package ru.practicum.dto.compilation;
 
 import ru.practicum.dto.event.EventShortDto;
 
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 public class CompilationDto {
@@ -13,7 +12,6 @@ public class CompilationDto {
 
     private Boolean pinned;
 
-    @NotNull
     private String title;
 
     public List<EventShortDto> getEvents() {

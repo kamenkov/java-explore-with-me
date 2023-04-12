@@ -3,6 +3,7 @@ package ru.practicum.service;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.mapper.CompilationMapper;
 import ru.practicum.model.Compilation;
 import ru.practicum.repository.CompilationRepository;
@@ -46,7 +47,8 @@ public class CompilationService {
         compilationRepository.delete(compilation);
     }
 
-    public List<Compilation> publicSearch(boolean pinned, int from, int size) {
+    @Transactional(readOnly = true)
+    public List<Compilation> publicSearch(Boolean pinned, int from, int size) {
         Pageable pageable = PageRequest.of(from / size, size);
         return compilationRepository.findByPinned(pinned, pageable).getContent();
     }

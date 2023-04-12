@@ -2,21 +2,17 @@ package ru.practicum.dto.event;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import ru.practicum.dto.category.CategoryDto;
+import ru.practicum.dto.location.LocationDto;
 import ru.practicum.dto.user.UserShortDto;
 import ru.practicum.model.EventState;
-import ru.practicum.model.Location;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 public class EventFullDto {
     private Long id;
 
-    @NotBlank
     private String annotation;
 
-    @NotNull
     private CategoryDto category;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
@@ -25,20 +21,16 @@ public class EventFullDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime publishedOn;
 
-    @NotNull
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime eventDate;
 
-    @NotBlank
     private String title;
 
     private String description;
 
-    @NotNull
     private UserShortDto initiator;
 
-    @NotNull
-    private Location location;
+    private LocationDto location;
 
     private boolean paid;
 
@@ -124,11 +116,11 @@ public class EventFullDto {
         this.initiator = initiator;
     }
 
-    public Location getLocation() {
+    public LocationDto getLocation() {
         return location;
     }
 
-    public void setLocation(Location location) {
+    public void setLocation(LocationDto location) {
         this.location = location;
     }
 

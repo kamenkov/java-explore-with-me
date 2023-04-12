@@ -2,9 +2,11 @@ package ru.practicum.dto.event;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import ru.practicum.constraint.FutureTime;
-import ru.practicum.model.Location;
+import ru.practicum.dto.location.LocationDto;
 import ru.practicum.model.StateAction;
 
+import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 public class UpdateEventUserRequest {
@@ -17,11 +19,12 @@ public class UpdateEventUserRequest {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime eventDate;
 
+    @Size(max = 255)
     private String title;
 
     private String description;
 
-    private Location location;
+    private LocationDto location;
 
     private Boolean paid;
 
@@ -29,6 +32,7 @@ public class UpdateEventUserRequest {
 
     private StateAction stateAction;
 
+    @PositiveOrZero
     private Integer participantLimit;
 
     public String getAnnotation() {
@@ -71,11 +75,11 @@ public class UpdateEventUserRequest {
         this.description = description;
     }
 
-    public Location getLocation() {
+    public LocationDto getLocation() {
         return location;
     }
 
-    public void setLocation(Location location) {
+    public void setLocation(LocationDto location) {
         this.location = location;
     }
 

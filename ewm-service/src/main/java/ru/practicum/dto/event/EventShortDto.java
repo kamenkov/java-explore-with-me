@@ -4,23 +4,18 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import ru.practicum.dto.category.CategoryDto;
 import ru.practicum.dto.user.UserShortDto;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 public class EventShortDto {
 
     private Long id;
 
-    @NotBlank
     private String annotation;
 
-    @NotNull
     private CategoryDto category;
 
     private Long confirmedRequests;
 
-    @NotNull
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime eventDate;
 
@@ -28,7 +23,6 @@ public class EventShortDto {
 
     private Boolean paid;
 
-    @NotBlank
     private String title;
 
     private Long views;

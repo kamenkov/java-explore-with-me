@@ -42,7 +42,7 @@ public class EventService {
         return eventRepository.save(event);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Event publicFindById(Long id) {
         Event event = eventRepository.findByStateAndId(EventState.PUBLISHED, id)
                 .orElseThrow(notFoundException(EVENT_NOT_FOUND, id));
@@ -58,6 +58,7 @@ public class EventService {
         return eventRepository.findAllById(eventIds);
     }
 
+    @Transactional(readOnly = true)
     public List<Event> searchUserEvents(Long userId, int from, int size) {
         Pageable pageable = PageRequest.of(from / size, size);
         User initiator = userService.findById(userId);
@@ -91,6 +92,7 @@ public class EventService {
         return eventRepository.save(savedEvent);
     }
 
+    @Transactional(readOnly = true)
     public List<Event> search(Set<Long> users,
                               Set<EventState> states,
                               Set<Long> categories,
@@ -136,7 +138,7 @@ public class EventService {
         return eventRepository.save(savedEvent);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Event> publicSearch(String text,
                                     Set<Long> categories,
                                     Boolean paid,

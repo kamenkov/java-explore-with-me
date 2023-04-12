@@ -1,15 +1,19 @@
 package ru.practicum.web.publics;
 
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.category.CategoryDto;
 import ru.practicum.mapper.CategoryMapper;
 import ru.practicum.model.Category;
 import ru.practicum.service.CategoryService;
 
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Validated
 @RestController
 @RequestMapping(path = "/categories")
 public class PublicCategoryController {
@@ -22,10 +26,9 @@ public class PublicCategoryController {
         this.categoryService = categoryService;
     }
 
-    @Transactional(readOnly = true)
     @GetMapping
-    public List<CategoryDto> search(@RequestParam(defaultValue = "0") int from,
-                                    @RequestParam(defaultValue = "10") int size) {
+    public List<CategoryDto> search(@RequestParam(defaultValue = "0") @PositiveOrZero int from,
+                                    @RequestParam(defaultValue = "10") @Positive int size) {
         return categoryService.search(from, size).stream()
                 .map(categoryMapper::categoryMapToDto)
                 .collect(Collectors.toList());

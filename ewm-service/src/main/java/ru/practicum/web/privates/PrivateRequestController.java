@@ -1,7 +1,6 @@
 package ru.practicum.web.privates;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.event.ParticipationRequestDto;
 import ru.practicum.mapper.RequestMapper;
@@ -23,7 +22,6 @@ public class PrivateRequestController {
         this.requestMapper = requestMapper;
     }
 
-    @Transactional(readOnly = true)
     @GetMapping
     public List<ParticipationRequestDto> search(@PathVariable Long userId) {
         return requestService.getRequestsByUserId(userId).stream()

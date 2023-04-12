@@ -34,8 +34,7 @@ public class Event {
     @JoinColumn(name = "initiator_id")
     private User initiator;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "location_id")
+    @Embedded
     private Location location;
 
     private Boolean paid;

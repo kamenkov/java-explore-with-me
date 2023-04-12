@@ -18,15 +18,13 @@ public class FutureTimeValidator implements ConstraintValidator<FutureTime, Loca
 
     @Override
     public boolean isValid(LocalDateTime value, ConstraintValidatorContext context) {
-        if (value == null) {
-            return true;
-        }
+        if (value != null) {
+            LocalDateTime now = LocalDateTime.now();
+            LocalDateTime minDate = now.plusHours(hours);
 
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime minDate = now.plusHours(hours);
-
-        if (!value.isAfter(minDate)) {
-            throw new ConflictException("Event date should be after than {0} hours", hours);
+            if (!value.isAfter(minDate)) {
+                throw new ConflictException("Event date should be after than {0} hours", hours);
+            }
         }
         return true;
     }

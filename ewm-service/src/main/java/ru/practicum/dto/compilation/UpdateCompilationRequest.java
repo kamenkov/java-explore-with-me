@@ -1,5 +1,6 @@
 package ru.practicum.dto.compilation;
 
+import javax.validation.constraints.Size;
 import java.util.List;
 
 public class UpdateCompilationRequest {
@@ -8,6 +9,7 @@ public class UpdateCompilationRequest {
 
     private Boolean pinned;
 
+    @Size(max = 255)
     private String title;
 
     public List<Long> getEvents() {

@@ -1,27 +1,14 @@
 package ru.practicum.model;
 
-import javax.persistence.*;
+import javax.persistence.Embeddable;
 import java.util.Objects;
 
-@Entity
-@Table(name = "location")
+@Embeddable
 public class Location {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
     private float lat;
 
     private float lon;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public float getLat() {
         return lat;
@@ -44,11 +31,11 @@ public class Location {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Location location = (Location) o;
-        return Objects.equals(id, location.id);
+        return Float.compare(location.lat, lat) == 0 && Float.compare(location.lon, lon) == 0;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(lat, lon);
     }
 }

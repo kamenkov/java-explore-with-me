@@ -3,6 +3,7 @@ package ru.practicum.service;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.model.User;
 import ru.practicum.repository.UserRepository;
 
@@ -20,6 +21,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
+    @Transactional(readOnly = true)
     public List<User> search(Set<Long> ids, int from, int size) {
         Pageable pageable = PageRequest.of(from / size, size);
         if (ids == null) {
@@ -28,6 +30,7 @@ public class UserService {
         return userRepository.findByIdIn(ids, pageable).getContent();
     }
 
+    @Transactional(readOnly = true)
     public User findById(Long id) {
         return userRepository
                 .findById(id)

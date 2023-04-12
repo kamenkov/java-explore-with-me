@@ -34,7 +34,6 @@ public class PrivateEventController {
         this.requestService = requestService;
     }
 
-    @Transactional(readOnly = true)
     @GetMapping
     public List<EventShortDto> search(@PathVariable Long userId,
                                       @RequestParam(defaultValue = "0") int from,

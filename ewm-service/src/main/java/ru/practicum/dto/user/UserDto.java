@@ -1,17 +1,11 @@
 package ru.practicum.dto.user;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
-
 public class UserDto {
 
     private Long id;
 
-    @NotNull
-    @Email
     private String email;
 
-    @NotNull
     private String name;
 
     public Long getId() {
