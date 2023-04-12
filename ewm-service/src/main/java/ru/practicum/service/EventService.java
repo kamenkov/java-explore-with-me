@@ -55,7 +55,7 @@ public class EventService {
     public Event publicFindById(Long id) {
         Event event = eventRepository.findByStateAndId(EventState.PUBLISHED, id)
                 .orElseThrow(notFoundException(EVENT_NOT_FOUND, id));
-        event.setViews(event.getViews() + 1);
+        event.setViews(statsClient.getViews(id));
         return event;
     }
 

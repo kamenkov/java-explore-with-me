@@ -4,16 +4,16 @@ public class ViewStats {
 
     private String app;
 
-    private String url;
+    private String uri;
 
     private long hits;
 
     public ViewStats() {
     }
 
-    public ViewStats(String app, String url, long hits) {
+    public ViewStats(String app, String uri, long hits) {
         this.app = app;
-        this.url = url;
+        this.uri = uri;
         this.hits = hits;
     }
 
@@ -25,12 +25,12 @@ public class ViewStats {
         this.app = app;
     }
 
-    public String getUrl() {
-        return url;
+    public String getUri() {
+        return uri;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setUri(String uri) {
+        this.uri = uri;
     }
 
     public long getHits() {

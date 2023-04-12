@@ -43,7 +43,7 @@ public class BaseClient {
                                                           String path,
                                                           @Nullable Map<String, Object> parameters,
                                                           @Nullable T body) {
-        HttpEntity<T> requestEntity = new HttpEntity<>(body);
+        HttpEntity<T> requestEntity = body == null ? new HttpEntity<>(null, null) : new HttpEntity<>(body);
 
         ResponseEntity<Object> serverResponse;
         try {
