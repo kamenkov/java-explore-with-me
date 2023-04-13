@@ -20,5 +20,9 @@ public interface CompilationMapper {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateCompilation(Compilation from, @MappingTarget Compilation to);
 
+    @Condition
+    default boolean isNotEmpty(String string) {
+        return string != null && !string.isEmpty();
+    }
 }
 

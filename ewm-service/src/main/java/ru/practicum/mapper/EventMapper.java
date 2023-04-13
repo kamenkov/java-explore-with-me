@@ -24,4 +24,8 @@ public interface EventMapper {
     @Mapping(source = "state", target = "state", ignore = true)
     void updateEvent(Event from, @MappingTarget Event to);
 
+    @Condition
+    default boolean isNotEmpty(String string) {
+        return string != null && !string.isEmpty();
+    }
 }
