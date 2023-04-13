@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 public class NewEventDto {
 
     @NotBlank
+    @Size(max = 2000)
     private String annotation;
 
     @NotNull
@@ -31,6 +32,7 @@ public class NewEventDto {
     private String title;
 
     @NotBlank
+    @Size(max = 10000)
     private String description;
 
     @NotNull

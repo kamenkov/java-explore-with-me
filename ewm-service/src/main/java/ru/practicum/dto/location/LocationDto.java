@@ -5,24 +5,24 @@ import javax.validation.constraints.NotNull;
 public class LocationDto {
 
     @NotNull
-    private float lat;
+    private Float lat;
 
     @NotNull
-    private float lon;
+    private Float lon;
 
-    public float getLat() {
+    public Float getLat() {
         return lat;
     }
 
-    public void setLat(float lat) {
+    public void setLat(Float lat) {
         this.lat = lat;
     }
 
-    public float getLon() {
+    public Float getLon() {
         return lon;
     }
 
-    public void setLon(float lon) {
+    public void setLon(Float lon) {
         this.lon = lon;
     }
 

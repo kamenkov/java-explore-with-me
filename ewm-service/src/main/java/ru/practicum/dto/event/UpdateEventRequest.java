@@ -7,6 +7,7 @@ import javax.validation.constraints.Size;
 
 public class UpdateEventRequest {
 
+    @Size(max = 2000)
     private String annotation;
 
     private Long category;
@@ -14,6 +15,7 @@ public class UpdateEventRequest {
     @Size(max = 255)
     private String title;
 
+    @Size(max = 10000)
     private String description;
 
     private LocationDto location;

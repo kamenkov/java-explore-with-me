@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.client.StatsClient;
@@ -19,9 +20,7 @@ import ru.practicum.model.User;
 import ru.practicum.repository.EventRepository;
 
 import java.time.LocalDateTime;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static ru.practicum.handler.exception.NotFoundException.notFoundException;
@@ -61,15 +60,24 @@ public class EventService {
     public Event publicFindById(Long id) {
         Event event = eventRepository.findByStateAndId(EventState.PUBLISHED, id)
                 .orElseThrow(notFoundException(EVENT_NOT_FOUND, id));
-        event.setViews(statsClient.getViews(id));
+        Long views = statsClient.getViewsForEvents(List.of(id), event.getPublishedOn()).get(id);
+        if (views != null) {
+            event.setViews(views);
+        }
         return event;
     }
 
-    public Event findById(Long id) {
+    public Event findById(@Nullable Long id) {
+        if (id == null) {
+            return null;
+        }
         return eventRepository.findById(id).orElseThrow(notFoundException(EVENT_NOT_FOUND, id));
     }
 
     public List<Event> findByIds(List<Long> eventIds) {
+        if (eventIds == null || eventIds.contains(null)) {
+            return Collections.emptyList();
+        }
         return eventRepository.findAllById(eventIds);
     }
 
@@ -77,13 +85,32 @@ public class EventService {
     public List<Event> searchUserEvents(Long userId, int from, int size) {
         Pageable pageable = PageRequest.of(from / size, size);
         User initiator = userService.findById(userId);
-        return eventRepository.findEventsByInitiator(initiator, pageable).getContent();
+        List<Event> events = eventRepository.findEventsByInitiator(initiator, pageable).getContent();
+        Map<Long, Long> views = getViewsByEvents(events);
+        if (views.isEmpty()) {
+            return events;
+        }
+        for (Event event : events) {
+            Long hits = views.get(event.getId());
+            if (hits != null) {
+                event.setViews(hits);
+            }
+        }
+        return events;
     }
 
     public Event findUserEvent(Long userId, Long eventId) {
         User initiator = userService.findById(userId);
-        return eventRepository.findEventByIdAndInitiator(eventId, initiator)
+        Event event = eventRepository.findEventByIdAndInitiator(eventId, initiator)
                 .orElseThrow(notFoundException(EVENT_NOT_FOUND, eventId));
+        if (event.getPublishedOn() == null) {
+            return event;
+        }
+        Long views = statsClient.getViewsForEvents(List.of(eventId), event.getPublishedOn()).get(eventId);
+        if (views != null) {
+            event.setViews(views);
+        }
+        return event;
     }
 
     public Event updateEventByUser(Long userId, Long eventId, Event event,
@@ -127,12 +154,24 @@ public class EventService {
         if (rangeEnd == null) {
             rangeEnd = LocalDateTime.now().plusYears(1000L);
         }
-        return eventRepository.adminEventSearch(users,
+        List<Event> events = eventRepository.adminEventSearch(users,
                 states,
                 categories,
                 rangeStart,
                 rangeEnd,
                 pageable).getContent();
+
+        Map<Long, Long> views = getViewsByEvents(events);
+        if (views.isEmpty()) {
+            return events;
+        }
+        for (Event event : events) {
+            Long hits = views.get(event.getId());
+            if (hits != null) {
+                event.setViews(hits);
+            }
+        }
+        return events;
     }
 
     public Event updateEventByAdmin(Long eventId, Event event,
@@ -202,8 +241,12 @@ public class EventService {
                 EventState.PUBLISHED,
                 pageable).getContent();
 
+        Map<Long, Long> views = getViewsByEvents(events);
         for (Event event : events) {
-            event.setViews(statsClient.getViews(event.getId()));
+            Long hits = views.get(event.getId());
+            if (hits != null) {
+                event.setViews(hits);
+            }
         }
         if ("VIEWS".equals(sort)) {
             return events.stream()
@@ -213,5 +256,19 @@ public class EventService {
                     .collect(Collectors.toList());
         }
         return events;
+    }
+
+    private Map<Long, Long> getViewsByEvents(List<Event> events) {
+
+        LocalDateTime startDate = events.stream()
+                .map(Event::getPublishedOn)
+                .filter(Objects::nonNull)
+                .min(LocalDateTime::compareTo)
+                .orElse(null);
+        List<Long> eventIds = events.stream()
+                .map(Event::getId)
+                .collect(Collectors.toList());
+
+        return statsClient.getViewsForEvents(eventIds, startDate);
     }
 }
