@@ -2,7 +2,7 @@
   "info": {
     "_postman_id": "e0faf171-1abd-4a11-8750-620f0e52728a",
     "name": "Test Explore With Me - Comments",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
     "_exporter_id": "15475441"
   },
   "item": [
@@ -312,17 +312,7 @@
             }
           }
         },
-        "url": {
-          "raw": "{{baseUrl}}/users/{{uid}}/comments",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "users",
-            "{{uid}}",
-            "comments"
-          ]
-        }
+        "url": "{{baseUrl}}/users/{{uid}}/comments"
       },
       "response": []
     },
@@ -409,17 +399,7 @@
             }
           }
         },
-        "url": {
-          "raw": "{{baseUrl}}/users/{{uid}}/comments",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "users",
-            "{{uid}}",
-            "comments"
-          ]
-        }
+        "url": "{{baseUrl}}/users/{{uid}}/comments"
       },
       "response": []
     },
