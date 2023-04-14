@@ -1,11 +1,11 @@
 package ru.practicum.dto.comment;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 public class UpdateCommentDto {
 
-    @NotEmpty
+    @NotBlank
     @Size(max = 2000)
     private String commentBody;
 

@@ -12,6 +12,7 @@ import ru.practicum.model.EventState;
 import ru.practicum.model.User;
 import ru.practicum.repository.CommentRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static ru.practicum.handler.exception.NotFoundException.notFoundException;
@@ -19,6 +20,7 @@ import static ru.practicum.handler.exception.NotFoundException.notFoundException
 @Service
 public class CommentService {
 
+    public static final int MINUTES_FOR_EDITING = 30;
     private final CommentRepository commentRepository;
     private final EventService eventService;
     private final UserService userService;
@@ -41,6 +43,9 @@ public class CommentService {
 
     public Comment create(Long userId, Comment comment, Long eventId) {
         Event event = eventService.findById(eventId);
+        if (EventState.PUBLISHED != event.getState()) {
+            throw new ConflictException("You can't add comment, because event {0} is not published", eventId);
+        }
         User user = userService.findById(userId);
         comment.setEvent(event);
         comment.setAuthor(user);
@@ -53,7 +58,11 @@ public class CommentService {
         if (!savedComment.getAuthor().equals(user)) {
             throw new ConflictException("User {0} cannot update comment {1}", userId, commentId);
         }
+        if (savedComment.getCreated().isBefore(LocalDateTime.now().minusMinutes(MINUTES_FOR_EDITING))) {
+            throw new ConflictException("Editing is available within {0} minutes after creation", MINUTES_FOR_EDITING);
+        }
         savedComment.setCommentBody(comment.getCommentBody());
+        savedComment.setUpdated(LocalDateTime.now());
         return commentRepository.save(savedComment);
     }
 

@@ -24,6 +24,8 @@ public class Comment {
 
     private LocalDateTime created = LocalDateTime.now();
 
+    private LocalDateTime updated = LocalDateTime.now();
+
     public Long getId() {
         return id;
     }
@@ -62,6 +64,14 @@ public class Comment {
 
     public void setCreated(LocalDateTime created) {
         this.created = created;
+    }
+
+    public LocalDateTime getUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(LocalDateTime updated) {
+        this.updated = updated;
     }
 
     @Override

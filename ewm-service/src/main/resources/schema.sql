@@ -72,6 +72,7 @@ CREATE TABLE comment
     event_id     BIGINT                                  NOT NULL,
     comment_body VARCHAR(2000)                           NOT NULL,
     created      TIMESTAMP WITHOUT TIME ZONE,
+    updated      TIMESTAMP WITHOUT TIME ZONE,
     CONSTRAINT pk_comment PRIMARY KEY (id),
     CONSTRAINT FK_COMMENT_ON_AUTHOR FOREIGN KEY (author_id) REFERENCES app_user (id),
     CONSTRAINT FK_COMMENT_ON_EVENT FOREIGN KEY (event_id) REFERENCES event (id)
